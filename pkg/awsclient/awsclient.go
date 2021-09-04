@@ -1,8 +1,6 @@
 package awsclient
 
 import (
-	"encoding/json"
-
 	"github.com/alexandervantrijffel/goutil/logging"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -61,27 +59,18 @@ func CreateStreamingURL(context AppStreamContext, userId, appId string, validity
 	return *streamingUrl.StreamingURL, nil
 }
 
-func DescribeSessions(context AppStreamContext) error {
-	logging.Info("Sessions command started")
+func DescribeSessions(context AppStreamContext) ([]*appstream.Session, error) {
 	input := appstream.DescribeSessionsInput{
 		StackName: &context.StackName,
 		FleetName: &context.FleetName,
 	}
 	activeSessions, err := context.Service.DescribeSessions(&input)
 	if err != nil {
-		return err
+		return activeSessions.Sessions,err
 	}
 	if len(activeSessions.Sessions) == 0 {
-		logging.Info("No active AppStream sessions found for the current region")
-		return nil
+		return activeSessions.Sessions,nil
 	}
-
-	logging.Info("Sessions", prettyPrint(activeSessions.Sessions))
-
-	return nil
+	return activeSessions.Sessions,nil
 }
 
-func prettyPrint(object interface{}) string {
-	r, _ := json.MarshalIndent(object, "", "    ")
-	return string(r)
-}

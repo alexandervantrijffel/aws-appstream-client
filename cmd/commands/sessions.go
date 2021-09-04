@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/alexandervantrijffel/aws-appstream-client/pkg/awsclient"
+	"github.com/alexandervantrijffel/goutil/logging"
 	"github.com/urfave/cli/v2"
 )
 
@@ -31,6 +32,17 @@ var SessionsCommand = &cli.Command{
 			FleetName: ctx.String("fleet-name"),
 		}
 
-		return awsclient.DescribeSessions(context)
+		activeSessions, err := awsclient.DescribeSessions(context)
+		if err != nil {
+			return err
+		}
+
+		if len(activeSessions) == 0 {
+
+			logging.Info("No active AppStream sessions found for the current region")
+		} else {
+			logging.Info("Sessions", activeSessions)
+		}
+		return nil
 	},
 }
