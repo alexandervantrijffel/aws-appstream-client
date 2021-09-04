@@ -33,3 +33,11 @@ go run ./cmd sessions --stack-name <stack> --fleet-name <fleet> | zap-pretty
 ````
 
 In this example, [zap-pretty](https://github.com/maoueh/zap-pretty) is used to pretty format the output.
+
+### streamingurl
+
+Generate a streaming url for a given user and application id.
+
+```bash
+go run ./cmd streamingurl --stack-name <stack> --fleet-name <fleet> --user-id <user> --application-id <appsteam application id> | zap-pretty
+```

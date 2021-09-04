@@ -16,6 +16,7 @@ func main() {
 		Usage:                "AWS AppStream 2.0 cli",
 		Commands: []*cli.Command{
 			commands.SessionsCommand,
+			commands.StreamingURLCommand,
 		},
 	}
 

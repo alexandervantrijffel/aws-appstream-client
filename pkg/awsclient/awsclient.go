@@ -30,16 +30,44 @@ func NewService() (*appstream.AppStream, error) {
 			r.ClientInfo.ServiceName, r.Operation, r.Params)
 	})
 
-	return appstream.New(sess),nil
+	return appstream.New(sess), nil
 }
 
-func DescribeSessions(service *appstream.AppStream, stackName, fleetName string) error {
+type AppStreamContext struct {
+	Service   *appstream.AppStream
+	StackName string
+	FleetName string
+}
+
+func CreateStreamingURL(context AppStreamContext, userId, appId string, validity int64) (string, error) {
+	logging.Infof("appId %s", appId )
+	inp := appstream.CreateStreamingURLInput{
+		StackName:     &context.StackName,
+		FleetName:     &context.FleetName,
+		UserId:        &userId,
+		Validity:      &validity,
+		// use SessionContext to pass data to the app instance as environment variable
+		// %APPSTREAM_SESSION_CONTEXT%
+		//SessionContext: "some value",
+	}
+	if len(appId) > 0 {
+		inp.ApplicationId = &appId
+	}
+
+	streamingUrl, err := context.Service.CreateStreamingURL(&inp)
+	if err != nil {
+		return "", err
+	}
+	return *streamingUrl.StreamingURL, nil
+}
+
+func DescribeSessions(context AppStreamContext) error {
 	logging.Info("Sessions command started")
 	input := appstream.DescribeSessionsInput{
-		StackName: &stackName,
-		FleetName: &fleetName,
+		StackName: &context.StackName,
+		FleetName: &context.FleetName,
 	}
-	activeSessions, err := service.DescribeSessions(&input)
+	activeSessions, err := context.Service.DescribeSessions(&input)
 	if err != nil {
 		return err
 	}
