@@ -2,6 +2,10 @@
 
 Package that uses the AWS AppStream 2.0 API for managing AppStream sessions.
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/alexandervantrijffel/aws-appstream-client)](https://goreportcard.com/report/github.com/alexandervantrijffel/aws-appstream-client)
+
+*****
+
 ## AWS Authentication
 
 The credentials for AWS authentication can be provided in multiple ways. Either pass environment variables as described [here](https://docs.aws.amazon.com/sdk-for-go/api/aws/session) or with a combination of AWS_PROFILE and a [credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) at ~/.awc/credentials.
