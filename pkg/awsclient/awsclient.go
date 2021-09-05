@@ -24,7 +24,7 @@ func NewService() (*appstream.AppStream, error) {
 	}
 	sess.Handlers.Send.PushFront(func(r *request.Request) {
 		// Log every request made and its payload
-		logging.Debugf("Request: %s/%s, Params: %s",
+		logging.Debugf("request: %s/%+v, Params: %s",
 			r.ClientInfo.ServiceName, r.Operation, r.Params)
 	})
 
