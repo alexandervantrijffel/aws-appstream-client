@@ -23,24 +23,14 @@ then
 	exit 0
 fi
 
-go build -race ./...
+OUTPUT="$(go test -race ./...)"
 if [ $? -ne 0 ]
 then
-	echo "Failed to build project. Please check the output of"
-	echo "go build or run commit with --no-verify if you know"
+	echo "${OUTPUT}"
+	echo "Failed to run tests. Please check the output of"
+	echo "go test or run commit with --no-verify if you know"
 	echo "what you are doing."
   cd ..
 	exit 1
 fi
 
-golangci-lint run -E goimports -E dupl -E megacheck
-# -e 'DisabledTest|Use NewDialer instead|transform.RemoveFunc is deprecated|ExpirationMonths` is unused|.clearAll` is unused' 
-if [ $? -ne 0 ]
-then
-	echo ""
-	echo "golangci-lint has detected potential issues in your project."
-	echo "Please check its output or run commit with --no-verify"
-	echo "if you know what you are doing."
-  cd ..
-	exit 1
-fi
