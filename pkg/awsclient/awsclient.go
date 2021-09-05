@@ -38,12 +38,12 @@ type AppStreamContext struct {
 }
 
 func CreateStreamingURL(context AppStreamContext, userId, appId string, validity int64) (string, error) {
-	logging.Infof("appId %s", appId )
+	logging.Infof("appId %s", appId)
 	inp := appstream.CreateStreamingURLInput{
-		StackName:     &context.StackName,
-		FleetName:     &context.FleetName,
-		UserId:        &userId,
-		Validity:      &validity,
+		StackName: &context.StackName,
+		FleetName: &context.FleetName,
+		UserId:    &userId,
+		Validity:  &validity,
 		// use SessionContext to pass data to the app instance as environment variable
 		// %APPSTREAM_SESSION_CONTEXT%
 		//SessionContext: "some value",
@@ -66,11 +66,10 @@ func DescribeSessions(context AppStreamContext) ([]*appstream.Session, error) {
 	}
 	activeSessions, err := context.Service.DescribeSessions(&input)
 	if err != nil {
-		return activeSessions.Sessions,err
+		return activeSessions.Sessions, err
 	}
 	if len(activeSessions.Sessions) == 0 {
-		return activeSessions.Sessions,nil
+		return activeSessions.Sessions, nil
 	}
-	return activeSessions.Sessions,nil
+	return activeSessions.Sessions, nil
 }
-
